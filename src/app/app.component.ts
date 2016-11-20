@@ -8,6 +8,7 @@ import { LoginPage } from '../pages/login/login';
 import { SignupPage } from '../pages/signup/signup';
 import { TabsPage } from '../pages/tabs/tabs';
 import { TutorialPage } from '../pages/tutorial/tutorial';
+import { OdooRPCService } from 'angular2-odoo-jsonrpc';
 
 import { ConferenceData } from '../providers/conference-data';
 import { UserData } from '../providers/user-data';
@@ -48,6 +49,7 @@ export class ConferenceApp {
   rootPage: any = TutorialPage;
 
   constructor(
+    public odooRPC: OdooRPCService,
     public events: Events,
     public userData: UserData,
     public menu: MenuController,
@@ -69,6 +71,17 @@ export class ConferenceApp {
     });
 
     this.listenToLoginEvents();
+
+    this.odooRPC.init({
+            odoo_server: "/api"
+            //http_auth: "mmahgoub@gmail.com:123" // optional
+        });
+        this.odooRPC.login('tile', 'mmahgoub@gmail.com', '123').then(res => {
+            console.log('login success');
+        }).catch( err => {
+            console.error('login failed', err);
+        })
+    
   }
 
   openPage(page: PageObj) {
